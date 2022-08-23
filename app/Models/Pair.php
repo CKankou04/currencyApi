@@ -11,4 +11,18 @@ class Pair extends Model
     public function currency(){
         return $this->hasMany(Currencies::class);
     }
+
+   // use AvoidsDeletionConflicts, HasFactory, TableCache;
+
+    protected $guarded = ['id'];
+
+    public function currencyfrom()
+    {
+        return $this->belongsTo(Currency::class, 'id_currency_from');
+    }
+
+    public function to()
+    {
+        return $this->belongsTo(Currency::class, 'id_currency_to');
+    }
 }
