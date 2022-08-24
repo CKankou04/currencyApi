@@ -21,7 +21,7 @@ class Pair extends Model
         return $this->belongsTo(Currency::class, 'id_currency_from');
     }
 
-    public function to()
+    public function currencyto()
     {
         return $this->belongsTo(Currency::class, 'id_currency_to');
     }

@@ -25,8 +25,5 @@ class Currency extends Model
         return $this->hasMany(Pairs::class, 'id_currency_to');
     }
 
-    public function countries()
-    {
-        return $this->hasMany(Country::class, 'currency_code', 'currency_code');
-    }
+    
 }

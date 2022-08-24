@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\PairController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

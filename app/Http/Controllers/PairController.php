@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CurrencyResource;
-use App\Models\Currency;
 use App\Models\Pair;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class CurrencyController extends Controller
+class PairController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(): AnonymousResourceCollection
+    public function index()
     {
-        return CurrencyResource::collection(Currency::latest()->get());
+        $pair = Pair::with('currencyfrom', 'currencyto')->get();
+        return response()->json([
+            'status' => true,
+            'pairs'=> $pair,
+        ]);
+
+
+
     }
 
     /**
@@ -44,10 +43,10 @@ class CurrencyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Currency  $currency
+     * @param  \App\Models\Currency  $pair
      * @return \Illuminate\Http\Response
      */
-    public function show(Currency $currency)
+    public function show(Pair $pair)
     {
         //
     }
@@ -55,10 +54,10 @@ class CurrencyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Currency  $currency
+     * @param  \App\Models\Pair  $pair
      * @return \Illuminate\Http\Response
      */
-    public function edit(Currency $currency)
+    public function edit(Pair $pair)
     {
         //
     }
@@ -67,10 +66,10 @@ class CurrencyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Currency  $currency
+     * @param  \App\Models\Pair $pair
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Currency $currency)
+    public function update(Request $request, Pair $pair)
     {
         //
     }
@@ -78,10 +77,10 @@ class CurrencyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Currency  $currency
+     * @param  \App\Models\Pair  $pair
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Currency $currency)
+    public function destroy(Pair $pair)
     {
         //
     }
