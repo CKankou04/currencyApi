@@ -19,9 +19,8 @@ class PairFactory extends Factory
     public function definition()
     {
         return [
-            'id_currency_from' => fn () => Currency::factory(),
-            'id_currency_to' => fn () => Currency::factory(),
-            'name' => $this->faker->sentence(),
+            'id_currency_from' => rand(1,20),
+            'id_currency_to' => rand(1,20),
             'rate' => $this->faker->randomFloat(4, 0.0001, 10.0000),
             
         ];

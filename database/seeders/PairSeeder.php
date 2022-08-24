@@ -13,10 +13,6 @@ class PairSeeder extends Seeder
      * @return void
      */
 
-    private const Currencies = [
-        ['currency_code' => 'USD', 'name' => 'US Dollar', 'symbol' => '$'],
-    ];
-
     public function run()
     {
         //

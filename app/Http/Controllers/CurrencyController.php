@@ -16,8 +16,8 @@ class CurrencyController extends Controller
     public function index()
     {
         //
-        $pair = Pairs::all();
-        dd();
+        $pair = Pair::all();
+        dd($pair);
     }
 
     /**

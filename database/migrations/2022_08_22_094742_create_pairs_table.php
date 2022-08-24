@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('pairs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->integer('id_currency_from')->unsigned()->nullable();
+            $table->integer('id_currency_from')->unsigned();
             $table->foreign('id_currency_from')->references('id')->on('currencies');
-            $table->integer('id_currency_to')->unsigned()->nullable();
+            $table->integer('id_currency_to')->unsigned();
             $table->foreign('id_currency_to')->references('id')->on('currencies');
             $table->decimal('rate', 12, 6);
+            $table->unique(['id_currency_from', 'id_currency_to']);
             $table->timestamps();
         });
     }

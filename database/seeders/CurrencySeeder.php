@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Currency;
+use App\Models\Pair;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
@@ -15,7 +16,6 @@ class CurrencySeeder extends Seeder
      *
      * @return void
      */
-    
         private const Currencies = [
             ['currency_code' => 'USD', 'name' => 'US Dollar', 'symbol' => '$'],
             ['currency_code' => 'EUR', 'name' => 'Euro', 'symbol' => '€'],
@@ -38,12 +38,14 @@ class CurrencySeeder extends Seeder
             ['currency_code' => 'UAH', 'name' => 'hryvnia', 'symbol' => '₴'],
             ['currency_code' => 'AED', 'name' => 'UAE dirham', 'symbol' => 'AED'],
         ];
-    
+
         public function run()
         {
             (new Collection(self::Currencies))
                 ->when(! App::environment('testing'), fn ($currencies) => $currencies
                     ->each(fn ($currency) => Currency::create($currency)));
+             Pair::factory(15)->create();
+
         }
 }
 
