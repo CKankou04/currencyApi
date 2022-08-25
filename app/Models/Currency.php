@@ -17,12 +17,12 @@ class Currency extends Model
 
     public function fromPair()
     {
-        return $this->hasMany(Pairs::class, 'id_currency_from');
+        return $this->hasMany(Pair::class, 'id_currency_from');
     }
 
     public function toPair()
     {
-        return $this->hasMany(Pairs::class, 'id_currency_to');
+        return $this->hasMany(Pair::class, 'id_currency_to');
     }
 
     
