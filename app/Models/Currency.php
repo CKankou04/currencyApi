@@ -13,7 +13,7 @@ class Currency extends Model
     use HasFactory;
     //use AvoidsDeletionConflicts, HasFactory, TableCache;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['name', 'currency_code', 'symbol'];
 
     public function fromPair()
     {

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\CurrencyResource;
+use App\Http\Controllers\Controller;
 use App\Models\Currency;
-use App\Models\Pair;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CurrencyController extends Controller
 {
@@ -15,9 +13,9 @@ class CurrencyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): AnonymousResourceCollection
+    public function index()
     {
-        return CurrencyResource::collection(Currency::latest()->get());
+        //
     }
 
     /**
@@ -38,7 +36,22 @@ class CurrencyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'      => ['required'],
+            'currency_code'  => ['required'],
+            'symbol'     => ['required'],
+        ]);
+        $devise = Currency::create([
+            'name' => $request->name,
+            'currency_code' => $request->currency_code,
+            'symbol' => $request->symbol
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Devise crée',
+            'data' => $devise
+        ], 201);
     }
 
     /**

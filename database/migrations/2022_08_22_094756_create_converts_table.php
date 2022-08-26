@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('converts', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('id_pairs')->unsigned()->nullable();
             $table->foreign('id_pairs')->references('id')->on('pairs');
             $table->integer('nb_count'); 

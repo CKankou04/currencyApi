@@ -26,7 +26,7 @@ class PairController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -80,8 +80,10 @@ class PairController extends Controller
      * @param  \App\Models\Pair  $pair
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pair $pair)
+   /*  public function destroy(Pair $id)
     {
-        //
-    }
+        $pair = Pair::find($id);
+        $pair->delete();
+        return response()->json("Record deleted!");
+    } */
 }
