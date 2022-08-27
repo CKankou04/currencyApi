@@ -8,6 +8,7 @@ use App\Models\Currency;
 use App\Models\Pair;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ConvertCurrencyRequest;
 
 class ConvertController extends Controller
 {
@@ -23,54 +24,73 @@ class ConvertController extends Controller
     
         public function converts($currency_from, $currency_to, $price, $reverse = false)
         {
-            $codeFrom = Currency::where('code', $currency_from)->first();
-            $codeTo = Currency::where('code', $currency_to)->first();
-            $pair = Pair::with(['from', 'to', 'conversion'])
-                ->where('id_currency_from', $codeFrom->id)
-                ->where('id_currency_to', $codeTo->id)->first()
+            $codeCurrencyFrom = Currency::where('currency_code', $currency_from)->first();
+            $codeCurrencyTo = Currency::where('currency_code', $currency_to)->first();
+            $pair = Pair::with(['currencyfrom', 'currencyfrom', 'convert'])
+                ->where('id_currency_from', $codeCurrencyFrom->id)
+                ->where('id_currency_to', $codeCurrencyTo->id)->first()
             ;
             
-            if ($reverse == true) {
-                $converted = $price * 1/$pair->rates;
+             if ($reverse == true) {
+                $currencyConverted = $price * 1 /$pair->rate;
     
-                $conversion = DB::table('conversions')->insertGetId([
-                    'pair_id' => $pair->id,
+                $conversion = DB::table('converts')->getByID([
+                    'id_pair' => $pair->id,
                 ]);
     
                 $data = [
-                    'amount_currecy_from'   => $price,
-                    'from'                  => $currency_to,
-                    'amount_currency_to'    => $converted,
-                    'to'                    => $currency_from,
-                    'conversion'            => $conversion
+                    'price_from'        => $price,
+                    'currency_from'     => $currency_to,
+                    'price_to'          => $currencyConverted,
+                    'currency_to'       => $currency_from,
+                    'conversion'        => $conversion
                 ];
-            } else {
-                $converted = $price * $pair->rates;
+            } else { 
+                $currencyConverted = $price * $pair->rate;
     
                 $conversion = DB::table('converts')->insertGetId([
                     'pair_id' => $pair->id,
                 ]);
     
                 $data = [
-                    'amount_currency_from' => $price,
-                    'from'                 => $currency_from,
-                    'amount_currency_to'   => $converted,
-                    'to'                   => $currency_to,
-                    'conversion'            => $conversion
+                    'price_from'       => $price,
+                    'currency_from'    => $currency_from,
+                    'price_to'         => $currencyConverted,
+                    'currency_to'      => $currency_to,
+                    'conversion'       => $conversion
                 ];
     
-            }
+            
+            $pair->convertion()->increment('nb_count');
+
     
             return response()->json([
                 'status' => true,
                 'convert'=> $data,
             ]);
         }    
+      }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    /**
+     * Convert a quantity of currency from an existant pairs
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function decompte()
+    {
+        $pairs = Pair::getAll();
+
+        return $this->sendResponse($pairs, 'Paire retrouvé avec succès.');
+
+    }
+
+
+    
     public function create()
     {
         //

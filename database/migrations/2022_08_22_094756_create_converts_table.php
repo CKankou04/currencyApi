@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('converts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_pairs')->unsigned()->nullable();
-            $table->foreign('id_pairs')->references('id')->on('pairs');
+            $table->integer('id_pair')->unsigned()->nullable();
+            $table->foreign('id_pair')->references('id')->on('pairs');
             $table->integer('nb_count'); 
             $table->timestamps();
         });

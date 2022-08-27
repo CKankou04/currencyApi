@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ConvertController;
 use App\Http\Controllers\Api\CurrencyController;
 use App\Http\Controllers\Api\PairController;
 use App\Http\Controllers\AuthController;
@@ -24,7 +25,7 @@ Route::post('register', [AuthController::class,'register']);
 Route::post('login', [AuthController::class,'login']);
 Route::post('logout', [AuthController::class,'logout']);
 //Route::apiResource('posts', PostController::class)->middleware('auth:sanctum');
-Route::get('/convert/{id_currency_from}/{id_currency_to}/{price}/{reverse?}', [PairController::class, 'convert']);
+Route::get('/convert/{id_currency_from}/{id_currency_to}/{price}/{reverse?}', [ConvertController::class, 'converts']);
 
 Route::apiResource('currencies', CurrencyController::class);
 Route::apiResource('pairs', PairController::class);
