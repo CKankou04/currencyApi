@@ -91,20 +91,22 @@ class PairController extends Controller
     public function update(Request $request, Pair $pair)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required'
+            'id_currency_from' => 'required',
+            'id_currency_to' => 'required',
+            'rate' => 'required'
         ]);
-        $post = Pair::find($pair->id);
+        $pair = Pair::find($pair->id);
 
         if ($pair) {
             $pair->update([
-                'title' => $request->title,
-                'content' => $request->content
+                'id_currency_from' => $request->id_currency_from,
+                'id_currency_to' => $request->id_currency_to,
+                'rate' => $request->rate
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Post updated',
+                'message' => 'Paire mise à jour avec succès',
                 'data' => $pair
             ], 200);
         }
