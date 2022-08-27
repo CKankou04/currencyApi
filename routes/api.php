@@ -24,6 +24,7 @@ Route::post('register', [AuthController::class,'register']);
 Route::post('login', [AuthController::class,'login']);
 Route::post('logout', [AuthController::class,'logout']);
 //Route::apiResource('posts', PostController::class)->middleware('auth:sanctum');
+Route::get('/convert/{id_currency_from}/{id_currency_to}/{price}/{reverse?}', [PairController::class, 'convert']);
 
 Route::apiResource('currencies', CurrencyController::class);
 Route::apiResource('pairs', PairController::class);

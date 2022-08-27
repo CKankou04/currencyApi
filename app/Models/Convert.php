@@ -10,8 +10,8 @@ class Convert extends Model
     use HasFactory;
     protected $fillable = ['id_pair', 'nb_count'];
 
-    public function convert()
+    public function pair()
     {
-        return $this->hasMany(Convert::class);
+        return $this->belongsTo(Pair::class);
     }
 }
