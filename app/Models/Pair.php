@@ -8,13 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Pair extends Model
 {
     use HasFactory;
-    public function currency(){
-        return $this->hasMany(Currencies::class);
-    }
-
+   
    // use AvoidsDeletionConflicts, HasFactory, TableCache;
 
-    protected $guarded = ['id'];
+   protected $fillable = ['id_currency_from', 'id_currency_to', 'rate'];
 
     public function currencyfrom()
     {
@@ -24,5 +21,9 @@ class Pair extends Model
     public function currencyto()
     {
         return $this->belongsTo(Currency::class, 'id_currency_to');
+    }
+    public function convert()
+    {
+        return $this->belongsTo(Convert::class);
     }
 }

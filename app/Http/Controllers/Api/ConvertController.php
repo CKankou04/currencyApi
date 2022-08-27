@@ -3,23 +3,29 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CurrencyResource;
+use App\Models\Convert;
 use App\Models\Currency;
+use App\Models\Pair;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class CurrencyController extends Controller
+class ConvertController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index():AnonymousResourceCollection
+    public function index()
     {
-        return CurrencyResource::collection(Currency::latest()->get());
+        
     }
+    public function converts($currency_from, $currency_to, $amount, $inverse = false)
+        {
 
+            $currencyfrom = Currency::where('currency_code',$currency_from)->first;
+            $currencyto = Currency::where('currency_code',$currency_to)->first;
+            $pair = Pair::with(['currencyfrom', 'currencyto'])->where('id_currency_from',$currencyfrom->id)->where('id_currency_to',$currencyto->id);
+        }
     /**
      * Show the form for creating a new resource.
      *
@@ -38,31 +44,16 @@ class CurrencyController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name'      => ['required'],
-            'currency_code'  => ['required'],
-            'symbol'     => ['required'],
-        ]);
-        $devise = Currency::create([
-            'name' => $request->name,
-            'currency_code' => $request->currency_code,
-            'symbol' => $request->symbol
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Devise crée',
-            'data' => $devise
-        ], 201);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Currency  $currency
+     * @param  \App\Models\Convert  $convert
      * @return \Illuminate\Http\Response
      */
-    public function show(Currency $currency)
+    public function show(Convert $convert)
     {
         //
     }
@@ -70,10 +61,10 @@ class CurrencyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Currency  $currency
+     * @param  \App\Models\Convert  $convert
      * @return \Illuminate\Http\Response
      */
-    public function edit(Currency $currency)
+    public function edit(Convert $convert)
     {
         //
     }
@@ -82,10 +73,10 @@ class CurrencyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Currency  $currency
+     * @param  \App\Models\Convert  $convert
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Currency $currency)
+    public function update(Request $request, Convert $convert)
     {
         //
     }
@@ -93,10 +84,10 @@ class CurrencyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Currency  $currency
+     * @param  \App\Models\Convert  $convert
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Currency $currency)
+    public function destroy(Convert $convert)
     {
         //
     }

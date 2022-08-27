@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Convert extends Model
 {
     use HasFactory;
+    protected $fillable = ['id_pair', 'nb_count'];
+
+    public function convert()
+    {
+        return $this->hasMany(Convert::class);
+    }
 }
