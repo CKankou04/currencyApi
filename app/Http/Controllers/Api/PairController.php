@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PairResource;
 use App\Models\Pair;
 use Illuminate\Http\Request;
 
@@ -65,9 +66,10 @@ class PairController extends Controller
      * @param  \App\Models\Pair  $pair
      * @return \Illuminate\Http\Response
      */
-    public function show(Pair $pair)
+    public function show($id)
     {
-        //
+        $pair = Pair::find($id);
+        return new PairResource($pair);
     }
 
     /**
@@ -88,16 +90,15 @@ class PairController extends Controller
      * @param  \App\Models\Pair  $pair
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pair $pair)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'id_currency_from' => 'required',
-            'id_currency_to' => 'required',
-            'rate' => 'required'
+            'id_currency_from' =>  ['required'],
+            'id_currency_to' => ['required'],
+            'rate' => ['required']
         ]);
-        $pair = Pair::find($pair->id);
+        $pair = Pair::find($id);
 
-        if ($pair) {
             $pair->update([
                 'id_currency_from' => $request->id_currency_from,
                 'id_currency_to' => $request->id_currency_to,
@@ -109,11 +110,6 @@ class PairController extends Controller
                 'message' => 'Paire mise à jour avec succès',
                 'data' => $pair
             ], 200);
-        }
-        return response()->json([
-            'success' => false,
-            'message' => 'Pair not found'
-        ], 404);
 
     }
 
@@ -130,12 +126,12 @@ class PairController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Pair deleted'
+                'message' => 'Paire supprimer avec succès'
             ], 200);
         }
         return response()->json([
             'success' => false,
-            'message' => 'Pair not found'
+            'message' => 'Pair non trouvé'
         ], 404);
     }
 }

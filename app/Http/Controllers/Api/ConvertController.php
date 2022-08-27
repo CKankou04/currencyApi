@@ -22,54 +22,47 @@ class ConvertController extends Controller
         
     }
     
-        public function converts($currency_from, $currency_to, $price, $reverse = false)
-        {
-            $codeCurrencyFrom = Currency::where('currency_code', $currency_from)->first();
-            $codeCurrencyTo = Currency::where('currency_code', $currency_to)->first();
-            $pair = Pair::with(['currencyfrom', 'currencyfrom', 'convert'])
-                ->where('id_currency_from', $codeCurrencyFrom->id)
-                ->where('id_currency_to', $codeCurrencyTo->id)->first()
-            ;
+    public function converts($currency_from, $currency_to, $price, $reverse = false)
+    {
+        $codeCurrencyFrom = Currency::where('currency_code', $currency_from)->first();
+        $codeCurrencyTo = Currency::where('currency_code', $currency_to)->first();
+        $pair = Pair::with(['currencyfrom', 'currencyfrom', 'convert'])
+            ->where('id_currency_from', $codeCurrencyFrom->id)
+            ->where('id_currency_to', $codeCurrencyTo->id)->first()
+        ;
+        
+            if ($reverse == true) {
             
-             if ($reverse == true) {
                 $currencyConverted = $price * 1 /$pair->rate;
-    
-                $conversion = DB::table('converts')->getByID([
-                    'id_pair' => $pair->id,
-                ]);
-    
+                
                 $data = [
                     'price_from'        => $price,
                     'currency_from'     => $currency_to,
                     'price_to'          => $currencyConverted,
                     'currency_to'       => $currency_from,
-                    'conversion'        => $conversion
+                    
                 ];
-            } else { 
+             } else { 
                 $currencyConverted = $price * $pair->rate;
-    
-                $conversion = DB::table('converts')->insertGetId([
-                    'pair_id' => $pair->id,
-                ]);
-    
+
                 $data = [
                     'price_from'       => $price,
                     'currency_from'    => $currency_from,
                     'price_to'         => $currencyConverted,
                     'currency_to'      => $currency_to,
-                    'conversion'       => $conversion
-                ];
-    
-            
-            $pair->convertion()->increment('nb_count');
+                
+            ];
 
-    
-            return response()->json([
-                'status' => true,
-                'convert'=> $data,
-            ]);
-        }    
-      }
+        } 
+        //$pair->convertion()->increment('nb_count');
+
+
+        return response()->json([
+            'status' => true,
+            'convert'=> $data,
+        ]);
+       
+    }
     /**
      * Show the form for creating a new resource.
      *
