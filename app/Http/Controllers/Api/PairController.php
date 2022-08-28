@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PairResource;
+use App\Models\Currency;
 use App\Models\Pair;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PairController extends Controller
 {
@@ -133,5 +135,108 @@ class PairController extends Controller
             'success' => false,
             'message' => 'Pair non trouvé'
         ], 404);
+    }
+    public function converts($currency_from, $currency_to, $price, $reverse = false)
+    {
+        $codeCurrencyFrom = Currency::where('currency_code', $currency_from)->first();
+        $codeCurrencyTo = Currency::where('currency_code', $currency_to)->first();
+       /*  $pair = Pair::with(['currencyfrom', 'currencyfrom', 'convert'])
+            ->where('id_currency_from', $codeCurrencyFrom->id)
+            ->where('id_currency_to', $codeCurrencyTo->id)->first()
+        ; */
+        if(isset($codeCurrencyFrom)){
+            if(isset($codeCurrencyTo)){
+                $pair = Pair::with('currencyfrom', 'currencyfrom')
+                    ->where('id_currency_from', $codeCurrencyFrom->id)
+                    ->where('id_currency_to', $codeCurrencyTo->id)->first();
+            }
+            else{
+                return response()->json([
+                    'success' => false,
+                    'message' => 'la deuxième currency non trouvé'
+                ], 404);
+            }
+        }
+        else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Devise 1 non trouvée'
+            ], 404);
+        }
+        if($pair) {
+            if ($reverse == 'true') {
+                $currencyConverted = $price * (1/$pair->rate);
+                $request = $pair->count + 1;
+                DB::table('pairs')
+                    ->where('id', $pair->id)
+                    ->update(['count' => $request]);
+
+                $data = [
+                    'price_from'      => $price,
+                    'currency_from'   => $currency_to,
+                    'price_to'        => $currencyConverted,
+                    'currency_to'     => $currency_from,
+                    'Requête'         => $request
+                ];
+            } else {
+                $currencyConverted = $price * $pair->rate;
+                $request = $pair->count + 1;
+                DB::table('pairs')
+                    ->where('id', $pair->id)
+                    ->update(['count' => $request]);
+
+                $data = [
+                    'price_from'        => $price,
+                    'currency_from'     => $currency_from,
+                    'price_to'          => $currencyConverted,
+                    'currency_to'       => $currency_to,
+                    'Requête'           => $request,
+                ];
+
+            }
+            return response()->json([
+                'status' => true,
+                'convert'=> $data,
+            ], 200);
+        }
+        else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Conversion impossible paire non trouvée'
+            ], 404);
+        }
+
+
+            /* if ($reverse == true) {
+            
+                $currencyConverted = $price * 1 /$pair->rate;
+                
+                $data = [
+                    'price_from'        => $price,
+                    'currency_from'     => $currency_to,
+                    'price_to'          => $currencyConverted,
+                    'currency_to'       => $currency_from,
+                    
+                ];
+             } else { 
+                $currencyConverted = $price * $pair->rate;
+
+                $data = [
+                    'price_from'       => $price,
+                    'currency_from'    => $currency_from,
+                    'price_to'         => $currencyConverted,
+                    'currency_to'      => $currency_to,
+               
+            ];
+
+        } 
+     
+
+
+        return response()->json([
+            'status' => true,
+            'convert'=> $data,
+        ]);  */
+       
     }
 }

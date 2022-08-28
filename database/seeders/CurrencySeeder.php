@@ -37,6 +37,7 @@ class CurrencySeeder extends Seeder
             ['currency_code' => 'CHF', 'name' => 'Swiss franc', 'symbol' => 'CHF'],
             ['currency_code' => 'UAH', 'name' => 'hryvnia', 'symbol' => '₴'],
             ['currency_code' => 'AED', 'name' => 'UAE dirham', 'symbol' => 'AED'],
+            ['currency_code' => 'GNF', 'name' => 'Franc Guinéen', 'symbol' => 'G'],
         ];
 
         public function run()

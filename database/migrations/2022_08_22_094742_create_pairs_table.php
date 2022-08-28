@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('id_currency_to')->unsigned();
             $table->foreign('id_currency_to')->references('id')->on('currencies');
             $table->decimal('rate', 12, 3);
+            $table->integer('count')->nullable();
             $table->unique(['id_currency_from', 'id_currency_to']);
             $table->timestamps();
         });

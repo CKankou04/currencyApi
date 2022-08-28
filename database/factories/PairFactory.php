@@ -22,6 +22,7 @@ class PairFactory extends Factory
             'id_currency_from' => rand(1,20),
             'id_currency_to' => rand(1,20),
             'rate' => $this->faker->randomFloat(4, 0.0001, 10.0000),
+            'count' => 0
             
         ];
     }
