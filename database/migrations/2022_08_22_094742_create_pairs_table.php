@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pairs', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unique();
             $table->integer('id_currency_from')->unsigned();
             $table->foreign('id_currency_from')->references('id')->on('currencies');
             $table->integer('id_currency_to')->unsigned();
