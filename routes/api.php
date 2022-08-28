@@ -21,12 +21,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('register', [AuthController::class,'register']);
-Route::post('login', [AuthController::class,'login']);
-Route::post('logout', [AuthController::class,'logout']);
-//Route::apiResource('posts', PostController::class)->middleware('auth:sanctum');
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
 Route::get('/convert/{id_currency_from}/{id_currency_to}/{price}/{reverse?}', [ConvertController::class, 'converts']);
+Route::get('/converts', [ConvertController::class, 'decompte']);
 
 Route::apiResource('currencies', CurrencyController::class);
 Route::apiResource('pairs', PairController::class);
-//Route::apiResource('convert', PairController::class);
+Route::apiResource('converts', ConvertController::class);

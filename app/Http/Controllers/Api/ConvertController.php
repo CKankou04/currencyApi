@@ -19,7 +19,11 @@ class ConvertController extends Controller
      */
     public function index()
     {
-        
+        $convert = Convert::all();
+        return response()->json([
+            'status' => true,
+            'convert'=> $convert,
+        ]);
     }
     
     public function converts($currency_from, $currency_to, $price, $reverse = false)
@@ -74,9 +78,14 @@ class ConvertController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function decompte()
+    public function decompte(Convert $convert)
     {
         $pairs = Pair::getAll();
+
+        $convert = $convert->increment('nb_count');
+        $convert->update([
+            'nb_count' => $convert
+        ]);
 
         return $this->sendResponse($pairs, 'Paire retrouvé avec succès.');
 
