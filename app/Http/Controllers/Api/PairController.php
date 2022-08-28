@@ -49,17 +49,27 @@ class PairController extends Controller
             'id_currency_to'  => ['required'],
             'rate'     => ['required'],
         ]);
-        $devise = Pair::create([
-            'id_currency_from' => $request->id_currency_from,
-            'id_currency_to' => $request->id_currency_to,
-            'rate' => $request->rate
-        ]);
-
+        if ($request){
+            $devise = Pair::create([
+                'id_currency_from' => $request->id_currency_from,
+                'id_currency_to' => $request->id_currency_to,
+                'rate' => $request->rate
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Création de devise avec succès',
+                'data' => $devise
+            ], 201);
+        }
+        else{
+            //Sinon on returne un message Paire non retrouvé
         return response()->json([
-            'success' => true,
-            'message' => 'Devise crée',
-            'data' => $devise
-        ], 201);
+            'success' => false,
+            'message' => 'Paire non trouvé'
+        ], 404);
+        }
+        
     }
 
     /**
@@ -92,15 +102,18 @@ class PairController extends Controller
      * @param  \App\Models\Pair  $pair
      * @return \Illuminate\Http\Response
      */
+
+     //Fonction permettant de modifier une paire
     public function update(Request $request, $id)
     {
+        //validation des champs
         $request->validate([
             'id_currency_from' =>  ['required'],
             'id_currency_to' => ['required'],
             'rate' => ['required']
         ]);
         $pair = Pair::find($id);
-
+        if($pair){
             $pair->update([
                 'id_currency_from' => $request->id_currency_from,
                 'id_currency_to' => $request->id_currency_to,
@@ -112,6 +125,14 @@ class PairController extends Controller
                 'message' => 'Paire mise à jour avec succès',
                 'data' => $pair
             ], 200);
+        }
+        else{
+            //Sinon on returne un message Paire non retrouvé
+        return response()->json([
+            'success' => false,
+            'message' => 'Paire non crée'
+        ], 404);
+        }
 
     }
 
@@ -121,29 +142,32 @@ class PairController extends Controller
      * @param  \App\Models\Pair  $pair
      * @return \Illuminate\Http\Response
      */
+
+     //Suppression d'une paire
     public function destroy(Pair $pair)
     {
+        //si la paire existe, on la supprime
         if ($pair) {
             $pair->delete();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Paire supprimer avec succès'
+                'message' => 'Suppression de la paire effectuée avec succès'
             ], 200);
         }
+        //Sinon on returne un message Paire non retrouvé
         return response()->json([
             'success' => false,
-            'message' => 'Pair non trouvé'
+            'message' => 'Paire non trouvé'
         ], 404);
     }
+
+    //Fonction permettant de convertir d'une devise en une autre 
     public function converts($currency_from, $currency_to, $price, $reverse = false)
     {
         $codeCurrencyFrom = Currency::where('currency_code', $currency_from)->first();
         $codeCurrencyTo = Currency::where('currency_code', $currency_to)->first();
-       /*  $pair = Pair::with(['currencyfrom', 'currencyfrom', 'convert'])
-            ->where('id_currency_from', $codeCurrencyFrom->id)
-            ->where('id_currency_to', $codeCurrencyTo->id)->first()
-        ; */
+       
         if(isset($codeCurrencyFrom)){
             if(isset($codeCurrencyTo)){
                 $pair = Pair::with('currencyfrom', 'currencyfrom')
@@ -205,38 +229,5 @@ class PairController extends Controller
                 'message' => 'Conversion impossible paire non trouvée'
             ], 404);
         }
-
-
-            /* if ($reverse == true) {
-            
-                $currencyConverted = $price * 1 /$pair->rate;
-                
-                $data = [
-                    'price_from'        => $price,
-                    'currency_from'     => $currency_to,
-                    'price_to'          => $currencyConverted,
-                    'currency_to'       => $currency_from,
-                    
-                ];
-             } else { 
-                $currencyConverted = $price * $pair->rate;
-
-                $data = [
-                    'price_from'       => $price,
-                    'currency_from'    => $currency_from,
-                    'price_to'         => $currencyConverted,
-                    'currency_to'      => $currency_to,
-               
-            ];
-
-        } 
-     
-
-
-        return response()->json([
-            'status' => true,
-            'convert'=> $data,
-        ]);  */
-       
     }
 }

@@ -17,6 +17,7 @@ class CurrencyController extends Controller
      */
     public function index():AnonymousResourceCollection
     {
+        //Recupération de la collection (liste) de devise
         return CurrencyResource::collection(Currency::latest()->get());
     }
 
@@ -36,8 +37,11 @@ class CurrencyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+      //Fonction de création de devise
     public function store(Request $request)
     {
+       
         $request->validate([
             'name'      => ['required'],
             'currency_code'  => ['required'],
@@ -51,7 +55,7 @@ class CurrencyController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Devise crée',
+            'message' => 'Devise crée avec succès',
             'data' => $devise
         ], 201);
     }

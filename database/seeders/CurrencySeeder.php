@@ -16,6 +16,8 @@ class CurrencySeeder extends Seeder
      *
      * @return void
      */
+    
+     //Remplissage de la table avec quelques devise
         private const Currencies = [
             ['currency_code' => 'USD', 'name' => 'US Dollar', 'symbol' => '$'],
             ['currency_code' => 'EUR', 'name' => 'Euro', 'symbol' => '€'],

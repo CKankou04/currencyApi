@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+     //Fonction d'enregistrement d'un nouvel utilisateur
     public function register(Request $request) {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -25,8 +26,10 @@ class AuthController extends Controller
         return response()->json(null, 404);
     }
     
+    //Connexion d'un utilisateur déjà enregistrer
     public function login(Request $request)
     {
+        //Valisation des champs
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -37,7 +40,7 @@ class AuthController extends Controller
     
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => ['Identifiant incorrect'],
             ]);
         }
     
@@ -47,6 +50,7 @@ class AuthController extends Controller
         return $request->user();
     }
 
+    //Deconnexion de l'utilisateur
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
